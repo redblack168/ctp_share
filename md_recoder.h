@@ -9,7 +9,7 @@ class FileStore;
 class MD_data_recoder : public CThostFtdcMdSpi
 {
 public:
-	MD_data_recoder(CThostFtdcMdApi* api);
+	MD_data_recoder(CThostFtdcMdApi* api, const std::set<std::string>& subscribelist);
 	virtual ~MD_data_recoder();
 	///当客户端与交易后台建立起通信连接时（还未登录前），该方法被调用。
 	virtual void OnFrontConnected();
@@ -56,4 +56,5 @@ private:
 	CThostFtdcMdApi*	md_api_;
 	int request_id_;
 	std::shared_ptr<FileStore>	file_store_;
+	const std::set<std::string>	subscribe_list_;
 };

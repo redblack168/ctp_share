@@ -48,9 +48,15 @@ int main(int argc, char** argv)
 
 		return 1;
 	}
+
+	std::set<std::string> subscribelist;
+	for (int i = 2 ; i < argc; ++ i)
+	{
+		subscribelist.insert(argv[i]);
+	}
 	SetupSIGHandler();
 	auto mdapi = CThostFtdcMdApi::CreateFtdcMdApi();
-	MD_data_recoder inst(mdapi);
+	MD_data_recoder inst(mdapi, subscribelist);
 	mdapi->RegisterSpi(&inst);
 	mdapi->RegisterFront(argv[1]);
 	mdapi->Init();

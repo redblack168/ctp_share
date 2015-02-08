@@ -3,12 +3,30 @@
 #include <iostream>
 #include <string.h>
 
+#include <stdio.h>
+#include <time.h>
+
 #include "FileStore.h"
 
-MD_data_recoder::MD_data_recoder(CThostFtdcMdApi* api)
+
+const std::string currentDateTime() {
+    time_t     now = time(0);
+    struct tm  tstruct;
+    char       buf[80];
+    tstruct = *localtime(&now);
+    // Visit http://en.cppreference.com/w/cpp/chrono/c/strftime
+    // for more information about date/time format
+    strftime(buf, sizeof(buf), "%Y-%m-%d", &tstruct);
+
+    return buf;
+}
+
+
+MD_data_recoder::MD_data_recoder(CThostFtdcMdApi* api, const std::set<std::string>& subscribelist)
 : md_api_ (api)
 , request_id_(0)
 , file_store_(new FileStore("./"))
+, subscribe_list_(subscribelist)
 {
 }
 
@@ -41,7 +59,8 @@ void MD_data_recoder::OnRspUserLogin(CThostFtdcRspUserLoginField* pRspUserLogin,
 	if (bIsLast && !IsErrorRspInfo(pRspInfo))
 	{
 		std::cout  << "Login Successful  Trading Day = " << md_api_->GetTradingDay() << std::endl;
-		current_day_ = md_api_->GetTradingDay();
+		//current_day_ = md_api_->GetTradingDay();
+		current_day_ = currentDateTime();
 		file_store_->ResetFiles(current_day_, GetInstrumentList(current_day_));
 		SubscribeMarketData();
 	}
@@ -114,11 +133,12 @@ void MD_data_recoder::SubscribeMarketData()
 
 std::set<std::string> MD_data_recoder::GetInstrumentList(const std::string& day)
 {
-	std::set<std::string> ret
-	{
-		"IF1502", "IF1503", "cu1502"
-	};
-	return ret;
+//	std::set<std::string> ret
+//	{
+//		"IF1502", "IF1503", "cu1502"
+//	};
+//	return ret;
+	return subscribe_list_;
 }
 
 bool MD_data_recoder::IsErrorRspInfo(CThostFtdcRspInfoField* pRspInfo)
