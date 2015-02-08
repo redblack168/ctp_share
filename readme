@@ -1,0 +1,3 @@
+gcc4.9.2
+waf as build system
+eclipse cdt as ide

@@ -43,6 +43,7 @@ void FileStore::OnData(CThostFtdcDepthMarketDataField* data)
 				<< data->PreDelta  << ','
 				<< data->CurrDelta  << ','
 				<< data->UpdateTime  << ','
+				<< data->UpdateMillisec  << ','
 				<< data->BidPrice1  << ','
 				<< data->BidVolume1  << ','
 				<< data->AskPrice1  << ','
