@@ -1,0 +1,4 @@
+_build
+*.csv
+.lock-waf_linux2_build
+*.con
